@@ -63,17 +63,91 @@ class EsqueletoHumano
 
 }
 
+public enum Palo
+{
+    Oros,
+    Copas,
+    Espadas,
+    Bastos
+}
+
+public class Naipe
+{
+    public Palo Palo { get; set; }
+    public int Numero { get; set; }
+
+    public Naipe(Palo palo, int numero)
+    {
+        Palo = palo;
+        Numero = numero;
+    }
+}
+
+public class Baraja
+{
+    private List<Naipe> naipes;
+
+    public Baraja()
+    {
+        naipes = new List<Naipe>();
+        InicializarNaipes();
+    }
+
+    public void InicializarNaipes()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            Palo palo = (Palo)i;
+            for (int numero = 1; numero <= 12; numero++)
+            {
+                naipes.Add(new Naipe(palo, numero));
+            }
+        }
+    }
+
+    public void Ordenar()
+    {
+        naipes = naipes.OrderBy(n => n.Palo).ThenBy(n => n.Numero).ToList();
+    }
+
+    public void Barajar()
+    {
+        Random random = new Random();
+        naipes = naipes.OrderBy(n => random.Next()).ToList();
+    }
+
+    public void Imprimir()
+    {
+        foreach (var naipe in naipes)
+        {
+            Console.WriteLine($"{naipe.Numero} de {naipe.Palo}");
+        }
+    }
+}
+
+
+
+
 class Program
 {
     static void Main()
-    {
-     
+    {     
         EsqueletoHumano esqueleto = new EsqueletoHumano();
-
-
         esqueleto.CargarHuesos();
-
         Console.ReadKey();
+
+        Baraja baraja = new Baraja();
+
+        Console.WriteLine("Baraja Inicial:");
+        baraja.Imprimir();
+
+        Console.WriteLine("\nBaraja Ordenada:");
+        baraja.Ordenar();
+        baraja.Imprimir();
+
+        Console.WriteLine("\nBaraja Barajada:");
+        baraja.Barajar();
+        baraja.Imprimir();
     }
 }
 
